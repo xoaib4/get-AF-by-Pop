@@ -38,38 +38,32 @@ You can change that rule by editing these two variables at the top of the script
 POP_TAG_START=7   # 0‑based position of first character
 POP_TAG_LEN=3     # length of the population tag
 ```
-How the Script Works
-Read sample IDs from the VCF header.
-
-Group sample IDs into population lists based on the tag.
-
-Run bcftools +fill-tags to calculate INFO/AF
-
-for all samples (Total)
-
-for each population (subset)
-
-Merge every AF column into one table:
-
-sql
-Copy
-Edit
+## How the Script Works
+1. Read sample IDs from the VCF header.
+2. Group sample IDs into population lists based on the tag.
+3. Run bcftools +fill-tags to calculate INFO/AF
+  a. for all samples (Total)
+  b. for each population (subset)
+4. Merge every AF column into one table:
+```
 CHROM  POS  REF  ALT  AF_Total  AF_ADG  AF_BPG  …  AF_RYK
+```
 Missing frequencies are denoted . (e.g., if all genotypes in that population are missing).
 
-Quick Start
-bash
-Copy
-Edit
+## Quick Start
 # 1. Make the script executable
+```
 chmod +x get_AF_by_pop.sh
-
+```
 # 2. Run the script
+```
 ./get_AF_by_pop.sh
-
+```
 # 3. Output
+```
 ls -lh allele_freq_table.tsv
-Output Columns
+```
+### Output Columns
 Column	Description
 CHROM	Chromosome
 POS	1‑based position
@@ -78,16 +72,14 @@ ALT	Alternate allele
 AF_Total	Allele frequency in the entire dataset
 AF_<POP>	Allele frequency in each detected population
 
-Tips & Extensions
+### Tips & Extensions
 Monomorphic sites are retained (via bcftools view -a), so AF can be 0 or 1.
 
-To split multiallelic sites beforehand:
-
-bash
-Copy
-Edit
+### To split multiallelic sites beforehand:
+```
 bcftools norm -m -any -Oz -o split.vcf.gz input.vcf.gz
 tabix -p vcf split.vcf.gz
+```
 Adapt the script to read a population map file instead of parsing IDs.
 
 Add more tags (e.g., AC, AN, missing rate) by modifying the bcftools query format string.

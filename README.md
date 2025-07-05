@@ -36,7 +36,8 @@ You can change that rule by editing these two variables at the top of the script
 
 ```bash
 POP_TAG_START=7   # 0‑based position of first character
-POP_TAG_LEN=3     # length of the population tag```
+POP_TAG_LEN=3     # length of the population tag
+```
 How the Script Works
 Read sample IDs from the VCF header.
 
